@@ -163,9 +163,7 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 			   END 
 			CLOSE update_Cursor
 			DEALLOCATE update_Cursor 
-		END 
-		   
-		
+		END 	
 	
 	--Insert all the data to Warehouse.StockItems table
 	INSERT INTO  warehouse.stockItems(StockItemID, StockItemName, SupplierID, 
@@ -214,7 +212,7 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 			   END 
 			CLOSE update_Cursor
 			DEALLOCATE update_Cursor 
-    INSERT INTO Purchasing.PurchaseOrders(PurchaseOrderid, SupplierID, OrderDate, DeliveryMethodID, ContactPersonID, 
+        INSERT INTO Purchasing.PurchaseOrders(PurchaseOrderid, SupplierID, OrderDate, DeliveryMethodID, ContactPersonID, 
 	SupplierReference, IsOrderFinalized, LastEditedBy)
 	SELECT PurchaseOrderID, Supplier, OrderDate, DeliveryMethodID, ContactPersonID,  SupplierReference, 0, 1	           
 	FROM #ItemStagingTableNew;
@@ -238,7 +236,7 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 	SELECT PurchaseOrderID, StockItemID, OuterPackageId, StockItemName, OuterPackageId, PackageTypeID, 0, 1
 	FROM #ItemStagingTableNew
 
-    SELECT * FROM Warehouse.StockItems
+        SELECT * FROM Warehouse.StockItems
 	SELECT * FROM Purchasing.PurchaseOrders
 	SELECT * FROM Purchasing.PurchaseOrderlines
 	--clean up.delete all the inserted data. 
