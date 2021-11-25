@@ -1,3 +1,5 @@
+
+	
 --Tranform the data from Json file and insert them into the related tables in database
 SET NOCOUNT ON 
 DECLARE @JSON AS Varchar(max) = N'{
@@ -114,6 +116,18 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 	INTO #ItemStagingTableNew 
 	FROM #ItemStagingTable AS t;
 
+	--create 3 tables which has same structure with 3 target tables to hold the data about to be inserted
+	DROP TABLE IF EXISTS #StockItemTemp
+	DROP TABLE IF EXISTS #PurchaseOrderTemp
+	DROP TABLE IF EXISTS #PurchaseOrderLinesTemp
+	GO
+	SELECT * INTO #StockItemTemp
+	FROM Warehouse.StockItems  WHERE 1 <> 1 ;
+	SELECT * INTO #PurchaseOrderTemp
+	FROM Purchasing.PurchaseOrders WHERE 1 <> 1 ; 
+	SELECT * INTO #PurchaseOrderLinesTemp
+	FROM Purchasing.PurchaseOrderLines WHERE 1<>1 ;
+
 	--find the missing data for column StockItemId in Warehouse.StockItems
 	--StockItemName in StockItems table has a unique index, so in order to insert data into table, 
 	--have to make each name unique in the ItemStagingTableNew 
@@ -144,7 +158,6 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 			CLOSE update_Cursor
 			DEALLOCATE update_Cursor 
 		END 
-
        ELSE 
 	     BEGIN 
 		   DECLARE update_cursor CURSOR FOR 
@@ -163,13 +176,16 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 			   END 
 			CLOSE update_Cursor
 			DEALLOCATE update_Cursor 
-		END 	
-	
-	--Insert all the data to Warehouse.StockItems table
+		END 
+		   	
+	--Insert all the data to Warehouse.StockItems table and #StockItemTemp
 	INSERT INTO  warehouse.stockItems(StockItemID, StockItemName, SupplierID, 
 	UnitPackageID, OuterPackageID, Brand, LeadTimeDays, QuantityPerOuter, IsChillerStock,
 	TaxRate, UnitPrice, RecommendedRetailPrice, TypicalWeightPerUnit, 
 	CustomFields, LastEditedBy)
+	OUTPUT 
+	inserted.* 
+	INTO #StockItemTemp
 	SELECT StockItemID, StockItemName, Supplier, UnitPackageID, OuterPackageID, 
 	Brand, LeadTimeDays, QuantityPerOuter,0, TaxRate, UnitPrice, RecommendedRetailPrice, 
 	TypicalWeightPerUnit, 
@@ -195,7 +211,7 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 	SET DeliveryMethodID = @deliveryMethodID
 	
 	/* add the PurchaseOrderID column to ItemStagingTableNew, and use cusor to update purchaseOrderID, then 
-	insert all the data into Purchasing.purchaseOrders table **/
+	insert all the data into Purchasing.purchaseOrders table  and #purchaseorderTemp table**/
 	ALTER TABLE #ItemStagingTableNew ADD PurchaseOrderID INT NOT NULL DEFAULT(1);
 	GO
 	DECLARE @orderID AS INT 
@@ -214,6 +230,9 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 			DEALLOCATE update_Cursor 
         INSERT INTO Purchasing.PurchaseOrders(PurchaseOrderid, SupplierID, OrderDate, DeliveryMethodID, ContactPersonID, 
 	SupplierReference, IsOrderFinalized, LastEditedBy)
+	OUTPUT 
+	inserted.* 
+	INTO #PurchaseOrderTemp
 	SELECT PurchaseOrderID, Supplier, OrderDate, DeliveryMethodID, ContactPersonID,  SupplierReference, 0, 1	           
 	FROM #ItemStagingTableNew;
 
@@ -230,15 +249,20 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 	UPDATE #ItemStagingTableNew
 	SET PackageTypeID = @PackageTypeID
 	
-	--insert all the data to Purchasing.purchaseOrderLines table
+	--insert all the data to Purchasing.purchaseOrderLines table and #purchaseOrderLinesTemp table
 	INSERT INTO Purchasing.PurchaseOrderLines(PurchaseOrderID, StockItemID, OrderedOuters, Description,
 	ReceivedOuters, PackageTypeID, IsOrderLineFinalized, LastEditedBy)
+	OUTPUT 
+	inserted.*
+	INTO #PurchaseOrderLinesTemp
 	SELECT PurchaseOrderID, StockItemID, OuterPackageId, StockItemName, OuterPackageId, PackageTypeID, 0, 1
 	FROM #ItemStagingTableNew
 
-        SELECT * FROM Warehouse.StockItems
-	SELECT * FROM Purchasing.PurchaseOrders
-	SELECT * FROM Purchasing.PurchaseOrderlines
+	--test result 
+        SELECT * FROM #StockItemTemp
+	SELECT * FROM #PurchaseOrderTemp
+	SELECT * FROM #PurchaseOrderLinesTemp
+	
 	--clean up.delete all the inserted data. 
 	DELETE FROM o
 	FROM Purchasing.PurchaseOrderLines AS o
