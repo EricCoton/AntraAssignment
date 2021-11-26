@@ -25,7 +25,7 @@ BEGIN
 		  AS T
 
 	--Using dynamic Sql to pull all the data from table 'orders' and table 'orderlines' into a table 
-	--NewSourceTable for specific date only
+	--NewSourceTable 
 	DECLARE @MySql AS NVARCHAR(MAX)
 	DROP TABLE IF EXISTS NewSourceTable
 	 SET @MySql =  N'SELECT l.*, ' + @columnName + 'INTO NewSourceTable
