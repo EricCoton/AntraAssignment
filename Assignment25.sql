@@ -41,5 +41,5 @@ SELECT FiscalYear AS [Year],
 	   [Toys] AS [Toys], 
 	   [T-Shirts] AS [T-Shirts],
 	   [USB Novelties] AS [USB Novelties]
-FROM (SELECT * FROM vw_StockItem_Sold_By_Group) AS d
+FROM vw_StockItem_Sold_By_Group
 FOR JSON PATH, ROOT('Sold_Total_By_Years')
