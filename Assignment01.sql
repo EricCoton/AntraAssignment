@@ -6,7 +6,7 @@ LEFT JOIN     --get all the people
 (SELECT p.PersonID, FullName, p.PhoneNumber AS PhoneNumber,p.FaxNumber AS FaxNumber, c.PhoneNumber AS CompanyPhoneNumber, c.FaxNumber AS CompanyFaxNumber
 FROM Application.People AS p
 JOIN Sales.Customers AS c
-ON p.PersonID = c.PrimaryContactPersonID
+ON p.PersonID = c.PrimaryContactPersonID OR p.PersonID = c.AlternateContactPersonID
 WHERE IsEmployee = 0               --people working for customer company
 UNION
 
@@ -19,7 +19,7 @@ UNION
 SELECT p.PersonID, FullName, p.PhoneNumber AS PhoneNumber,p.FaxNumber AS FaxNumber, s.PhoneNumber AS CompanyPhoneNumber, s.FaxNumber AS CompanyFaxNumber
 FROM Application.People AS p
 join Purchasing.Suppliers AS s
-ON p.PersonID = s.PrimaryContactPersonID
+ON p.PersonID = s.PrimaryContactPersonID OR p.PersonID = s.AlternateContactPersonID
 WHERE IsEmployee = 0 ) AS b       --people working for supplier company 
 ON a.PersonID = b.PersonID 
 WHERE a.PhoneNumber IS NOT NULL 
