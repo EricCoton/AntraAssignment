@@ -18,5 +18,6 @@ RETURN @TotalAmount
 END
 GO 
 
---to test the function
-SELECT dbo.fn_Total_By_OrderId(1117)
+SELECT *, dbo.fn_Total_By_OrderId(orderID) AS totalAmount
+FROM Sales.Invoices
+
