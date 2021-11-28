@@ -3,7 +3,7 @@ function to attach the order total to the other fields of invoices. **/
 DROP FUNCTION IF EXISTS fn_Total_By_OrderId
 GO
 CREATE FUNCTION fn_Total_By_OrderId(@OrderID INT)
-RETURNS INT 
+RETURNS DECIMAL(18, 2)
 BEGIN 
 DECLARE @TotalAmount AS DECIMAL(18,2)
 SELECT @TotalAmount = SUM((l.UnitPrice * l.Quantity)) 
