@@ -141,6 +141,7 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 	        DECLARE @var_string AS varchar(50), @var_int AS INT 
 	        DECLARE update_cursor CURSOR FOR 
 			SELECT StockItemID, StockItemName FROM #ItemStagingTableNew 
+			ORDER BY StockItemID, StockItemName;
 			DECLARE @First AS INT = 1;
 			OPEN update_cursor 
 			FETCH NEXT FROM update_cursor INTO @var_int,  @var_string
@@ -160,6 +161,7 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 	     BEGIN 
 		   DECLARE update_cursor CURSOR FOR 
 			SELECT StockItemID, StockItemName FROM #ItemStagingTableNew 
+			ORDER BY StockItemID, StockItemName;
 			DECLARE @Second AS INT = 0;
 			OPEN update_cursor 
 			FETCH NEXT FROM update_cursor
@@ -214,7 +216,8 @@ IF ISJSON(@JSON) = 1         --test whether JSON type or not
 	GO
 	DECLARE @orderID AS INT 
 	DECLARE update_cursor CURSOR FOR 
-			SELECT PurchaseOrderID FROM #ItemStagingTableNew 			
+			SELECT PurchaseOrderID FROM #ItemStagingTableNew 	
+			ORDER BY PurchaseOrderID;
 			OPEN update_cursor 
 			FETCH NEXT FROM update_cursor INTO @orderID
 			WHILE @@FETCH_STATUS = 0 
