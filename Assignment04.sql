@@ -1,4 +1,7 @@
 --List of Stock Items and total quantity for each stock item in Purchase Orders in Year 2013.
+
+USE WideWorldImporters;
+
 SELECT l.StockItemID, l.Description, 
  SUM(l.ReceivedOuters) 
 	 AS ItemQuantity
