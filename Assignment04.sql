@@ -3,8 +3,7 @@
 USE WideWorldImporters;
 
 SELECT l.StockItemID, l.Description, 
- SUM(l.ReceivedOuters) 
-	 AS ItemQuantity
+ SUM(l.ReceivedOuters)  AS ItemQuantity
 FROM Purchasing.PurchaseOrderLines AS l
 JOIN Purchasing.PurchaseOrders AS o
 ON l.PurchaseOrderID = o.PurchaseOrderID
