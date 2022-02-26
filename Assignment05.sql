@@ -1,6 +1,9 @@
 --List of stock items that have at least 10 characters in description
-SELECT StockItemID, StockItemName
-FROM Warehouse.StockItems
-WHERE len(StockItemName) > 10
-GROUP BY StockItemID, StockItemName
-ORDER BY StockItemID 
+
+USE WideWorldImporters;
+
+SELECT DISTINCT s.StockItemID, l.Description
+FROM Warehouse.StockItems AS s
+JOIN Purchasing.PurchaseOrderLines AS l 
+ON l.StockItemID = s.StockItemID
+WHERE LEN(l.Description) >=10; 
