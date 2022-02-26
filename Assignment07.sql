@@ -1,4 +1,7 @@
---List of States and Avg dates for processing (confirmed delivery date – order date).
+--List of States and Avg dates for processing (confirmed delivery date â€“ order date).
+
+USE WideWorldImporters;
+
 SELECT s.StateProvinceName,
 AVG(DATEDIFF(DAY, o.Orderdate, i.ConfirmedDeliveryTime)) AS Avg_Date
 FROM Sales.Invoices AS i
