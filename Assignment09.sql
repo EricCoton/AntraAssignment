@@ -1,4 +1,7 @@
 --List of StockItems that the company purchased more than sold in the year of 2015
+
+USE WideWorldImporters;
+
 WITH Item_Purchased_2015(StockItemID, Descrition, ItemQuantity)
 AS
 (SELECT l.StockItemID, l.Description, 
