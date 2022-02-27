@@ -2,6 +2,8 @@
 customer name, customer contact person name, customer phone, quantity) for the date of 2014-07-01. 
 Info should be relevant to that date.**/
 
+USE WideWorldImporters;
+
 SELECT l.Description AS StockItemName, 
 c.DeliveryAddressLine1 + c.DeliveryAddressLine1 AS DeliveryAddress, 
 ac.CityName, st.StateProvinceName AS StateName, 
