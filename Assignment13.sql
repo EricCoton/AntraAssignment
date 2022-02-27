@@ -1,5 +1,7 @@
 /* List of stock item groups and total quantity purchased, total quantity sold, 
-and the remaining stock quantity (quantity purchased – quantity sold)**/
+and the remaining stock quantity (quantity purchased â€“ quantity sold)**/
+
+USE WideWorldImporters
 
 SELECT p.StockItemID, p.Description,
 SUM(p.OrderedOuters) AS TotalQuantityBought, 
