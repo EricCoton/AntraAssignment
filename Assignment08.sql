@@ -29,15 +29,14 @@ AS p
 ORDER BY StateProvinceName
 GO 
 
----use CTE to get average processing days for each month by each state
-
 USE WideWorldImporters;                  --solution 2: using dynamic pivot table 
 GO
 DROP VIEW IF EXISTS VW_PivotSource
 GO
+
 CREATE VIEW VW_PivotSource 
 AS 
-SELECT DISTINCT s.StateProvinceName,LEFT(DATENAME(MM, o.OrderDate),3)  AS OrderByMonth,
+SELECT DISTINCT s.StateProvinceName, LEFT(DATENAME(MM, o.OrderDate),3) AS OrderByMonth,
 AVG(DATEDIFF(DAY, o.Orderdate, i.ConfirmedDeliveryTime))
 OVER(PARTITION BY s.StateProvinceName, MONTH(o.orderdate))
 AS AvgDate
@@ -49,12 +48,15 @@ ON o.CustomerID = c.CustomerID
 JOIN Application.Cities AS t
 ON c.PostalCityID = t.CityID
 JOIN Application.StateProvinces AS s
-ON t.StateProvinceID = s.StateProvinceID
+ON t.StateProvinceID = s.StateProvinceID;
+GO 
 
-DECLARE @sql AS NVARCHAR(5000), @columnName AS NVARCHAR(5000);
-SELECT @columnName = STRING_AGG(QUOTENAME(OrderByMonth), ',') FROM VW_PivotSource;
+DECLARE @sql AS NVARCHAR(MAX), @columnName AS NVARCHAR(MAX);
+SELECT @columnName = STRING_AGG(QUOTENAME(OrderByMonth), ',')
+FROM (SELECT DISTINCT OrderByMonth FROM VW_PivotSource 
+) AS s;
 SET @sql = N' SELECT * FROM VW_PivotSource PIVOT ( MAX(AvgDate) FOR OrderByMonth IN ( ' 
         + @columnName + N'))AS p ORDER BY StateProvinceName';
-
+EXEC sp_executeSql @stmt = @sql 
 
 
