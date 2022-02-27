@@ -1,5 +1,7 @@
 /*List of Cities in the US and the stock item that the city got the most deliveries
-in 2016. If the city did not purchase any stock items in 2016, print ìNo Salesî. **/
+in 2016. If the city did not purchase any stock items in 2016, print ‚ÄúNo Sales‚Äù. **/
+
+USE WideWorldImporters;
 
 WITH ItemForCity AS 
 (SELECT l.StockItemID, l.Description, c.PostalCityID, SUM(Quantity) AS Total, 
