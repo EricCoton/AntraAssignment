@@ -4,7 +4,7 @@ USE WideWorldImporters;
 
 WITH PivotSource                   --solution 1: hard coded pivot table
 AS 
-(SELECT DISTINCT s.StateProvinceName,LEFT(DATENAME(MM, o.OrderDate),3)  AS OrderByMonth
+(SELECT DISTINCT s.StateProvinceName,LEFT(DATENAME(MM, o.OrderDate),3)  AS OrderByMonth, 
 AVG(DATEDIFF(DAY, o.Orderdate, i.ConfirmedDeliveryTime))
 OVER(PARTITION BY s.StateProvinceName, MONTH(o.orderdate))
 AS AvgDate
