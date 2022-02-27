@@ -40,4 +40,4 @@ WHERE NOT EXISTS
 					 AND o.OrderDate < '20170101' AND o.OrderDate >'20151231'
                     GROUP BY  o.CustomerID 
                     HAVING SUM(Quantity) > 10) AS d
-				where d.CustomerID = c.CustomerID )
+WHERE d.CustomerID = c.CustomerID )
