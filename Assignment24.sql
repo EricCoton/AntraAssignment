@@ -1,4 +1,7 @@
 --Tranform the data from Json file and insert them into the related tables in database
+
+USE WideWorldImporters;
+
 SET NOCOUNT ON 
 DECLARE @JSON AS Varchar(max) = N'{
    "PurchaseOrders":[
