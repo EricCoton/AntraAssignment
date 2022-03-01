@@ -4,6 +4,8 @@ order total, and save the information (order id, order date, order total, custom
 new table. If a given date is already existing in the new table, throw an error and roll back. 
 Execute the stored procedure 5 times using different dates. **/
 
+USE WideWorldImporters;
+
 DROP TABLE IF EXISTS ods.Orders
 DROP SCHEMA IF EXISTS ods
 GO
