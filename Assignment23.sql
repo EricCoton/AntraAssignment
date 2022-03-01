@@ -2,6 +2,8 @@
 all the order data prior to the input date and load the order data that was placed in
 the next 7 days following the input date.**/
 
+USE WideWorldImporters;
+
 DROP TABLE IF EXISTS ods.NewOrders
 CREATE TABLE ods.NewOrders
 (CustomerID int, 
