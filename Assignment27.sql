@@ -4,6 +4,8 @@ as well as invoice line information (all columns) and forge them into a JSON str
 into the new table just created. Then write a query to run the stored procedure for each DATE that 
 customer id 1 got something delivered to him.**/
 
+USE WideWorldImporters;
+
 DROP TABLE IF EXISTS ods.ConfirmedDeliveryJson
 CREATE TABLE ods.ConfirmedDeliveryJson
  ( ID INT, 
@@ -19,7 +21,7 @@ BEGIN
 
 --Get all the column names in table 'Invoices' different from table 'OrderLines' 
 	DECLARE @columnName AS NVARCHAR(MAX)
-	SELECT @columnName = COALESCE( @columnName + ',',  '') + QUOTENAME(COLUMN_NAME)
+	SELECT @columnName = String_agg(QUOTENAME(COLUMN_NAME), ',')
 	FROM (SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'Invoices'
 		  Except SELECT  COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'InvoiceLines')
 		  AS T
@@ -34,7 +36,7 @@ BEGIN
 	  ON i.InvoiceId = L.InvoiceID'
 	
 
-	EXEC sp_executesql @stat = @MySql
+	EXEC sp_executesql @stmt = @MySql
 
 	--turn each row in NewSourceTable into a json object and load into the target table
 	INSERT INTO ods.ConfirmedDeliveryJson(ID, [Date], [Value])
