@@ -4,6 +4,8 @@
 [RecommendedRetailPrice] ,[TypicalWeightPerUnit] ,[MarketingComments]  ,[InternalComments], 
 [CountryOfManufacture], [Range], [Shelflife]. Migrate all the data in the original stock item table.**/
 
+USE WideWorldImporters;
+
 DROP TABLE IF EXISTS ods.StockItem
 SELECT  
 [StockItemID], [StockItemName] ,[SupplierID] ,[ColorID] ,
