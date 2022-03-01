@@ -1,4 +1,7 @@
 --Total quantity of stock items sold in 2015, group by country of manufacturing
+
+USE WideWorldImporters;
+
 WITH SourceTable AS 
 (SELECT l.StockItemID, w.StockItemName, l.Quantity, 
 JSON_VALUE(w.CustomFields, '$.CountryOfManufacture') AS Country
