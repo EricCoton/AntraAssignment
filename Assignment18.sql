@@ -1,6 +1,8 @@
 /*Create a view that shows the total quantity of stock items of each stock group sold (in orders) 
 by year 2013-2017. [Stock Group Name, 2013, 2014, 2015, 2016, 2017] **/
 
+USE WideWorldImporters;
+
 IF OBJECT_ID(N'vw_StockGroup_Sold_By_Year', N'V') IS NOT NULL
 DROP VIEW vw_StockGroup_Sold_By_Year
 GO
