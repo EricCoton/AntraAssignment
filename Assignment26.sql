@@ -1,5 +1,8 @@
 --Revisit your answer in (19). Convert the result into an XML string and save it to the server using TSQL
 --FOR XML PATH.
+
+USE WideWorldImporters;
+
 IF OBJECT_ID(N'vw_StockItem_Sold_By_Group', N'V') IS NOT NULL
 DROP VIEW vw_StockItem_Sold_By_Group
 GO
